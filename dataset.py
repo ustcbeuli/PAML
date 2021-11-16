@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
 
-
 class dbook(object):
     def __init__(self):
         self.rating_data, self.user_feature, self.item_feature, self.user_user, self.rating_list = self.load()
@@ -93,5 +92,5 @@ class yelp(object):
 
 
 if __name__ == '__main__':
-    # dbook()
-    yelp()
+    dbook()
+    # yelp()
