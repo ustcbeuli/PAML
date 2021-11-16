@@ -71,7 +71,6 @@ def find_other_iids(iid, iid_fid_dict, fid_iid_dict):
 
 def get_implicit_neighbor_for_single(uid, rate_uid_iid_dict, rate_iid_uid_dict, feat_iid_fid_dict, feat_fid_iids_dict):
     """
-    根据uid找到可能的邻居
     :param uid:
     :param rate_uid_iid_dict:
     :param rate_iid_uid_dict:
@@ -101,10 +100,9 @@ def get_implicit_neighbor_for_single(uid, rate_uid_iid_dict, rate_iid_uid_dict, 
 
 def get_heterogeneous_graph(dataset_path, item_feat_list, rate_list):
     """
-    构建异构图
     :param dataset_path:
-    :param item_feat_list: item使用的特征
-    :param rate_list: 所有可能的打分
+    :param item_feat_list: 
+    :param rate_list:
     :return:
     """
     data = pickle.load(open("{}/item_feature.pkl".format(dataset_path), "rb"))
@@ -146,7 +144,6 @@ def get_heterogeneous_graph(dataset_path, item_feat_list, rate_list):
 
 def get_index_mapping(dataset, output_dir):
     """
-    获得user、item和对应feature的index映射
     :param dataset:
     :param output_dir:
     :return:
@@ -188,7 +185,6 @@ def get_index_mapping(dataset, output_dir):
 
 def transfer_feat_to_index(dataset, user_set, user_feat_name_list, userFeat2id, item_set, item_feat_name_list, itemFeat2id, output_dir):
     """
-    把user和item的feature转化成index
     :param dataset:
     :param user_set:
     :param user_feat_name_list:
@@ -224,7 +220,6 @@ def transfer_feat_to_index(dataset, user_set, user_feat_name_list, userFeat2id, 
 
 def transfer_neighbor_to_index(dataset, user_set, user2id, user_in_meta_training, output_dir):
     """
-    把邻居的id转化成index
     :param dataset:
     :param user_set:
     :param user2id:
@@ -278,7 +273,6 @@ def get_task_tensor(uid_list, feats_list, labels_list, all_label_list):
 
 def get_training_samples(dataset_path, user2id, item2id, user_feature, item_feature, output_dir, **kwargs):
     """
-    构建训练和测试用的数据
     :param dataset_path:
     :param user2id:
     :param item2id:
@@ -365,11 +359,9 @@ def get_training_samples(dataset_path, user2id, item2id, user_feature, item_feat
         support_y_list = pickle.load(open("{}/{}/supp_y.pkl".format(output_dir, state), "rb"))
         social_info_list = []
         for _, (sup_x, sup_y) in tqdm(enumerate(zip(support_x_list, support_y_list))):
-            # 自己的特征tensor
             uid, iid_arr, feat_list = sup_x['uid'], sup_x['iid_arr'], sup_x['feat_list']
             self_feat_tensor, self_feat_mask_tensor = get_task_tensor([uid], [feat_list], [sup_y], all_label_list)
-
-            # 社交网络上邻居的特征tensor
+            
             neighbor_list = uidNeigh2id[uid]
             neighbor_feat_list, neighbor_label_list = [], []
             for neighbor in neighbor_list:
@@ -377,7 +369,6 @@ def get_training_samples(dataset_path, user2id, item2id, user_feature, item_feat
                 neighbor_label_list.append(meta_training_feat_dict[neighbor][1])
             neighbor_feat_tensor, neighbor_feat_mask_tensor = get_task_tensor(neighbor_list, neighbor_feat_list, neighbor_label_list, all_label_list)
 
-            # 协同过滤得到的邻居特征tensor
             coclick_list = get_coclick_neighbor(iid_arr, uid_iids_map, iid_uids_map, kwargs['implicit_num'])
             coclick_feat_list, coclick_label_list = [], []
             for coclick in coclick_list:
@@ -385,7 +376,6 @@ def get_training_samples(dataset_path, user2id, item2id, user_feature, item_feat
                 coclick_label_list.append(meta_training_feat_dict[coclick][1])
             coclick_feat_tensor, coclick_feat_mask_tensor = get_task_tensor(coclick_list, coclick_feat_list, coclick_label_list, all_label_list)
 
-            # 隐藏邻居的特征tensor
             imp_neighbor = get_implicit_neighbor_for_single(uid, rate_uid_iid_dict, rate_iid_uid_dict, feat_iid_fid_dict, feat_fid_iid_dict)
             idx = 0
             implicit_list = []
@@ -413,17 +403,16 @@ def get_training_samples(dataset_path, user2id, item2id, user_feature, item_feat
 
 def process(data_set, item_feat_list, implicit_num):
     """
-    生成数据
     :param data_set:
-    :param item_feat_list: 生成异构图用的特征
-    :param implicit_num: 隐藏好友的数量
+    :param item_feat_list: 
+    :param implicit_num: 
     :return:
     """
     dataset_path = "data/"
     output_dir = "data_process/"
     if data_set == 'dbook':
         dataset_path += 'dbook'
-        output_dir += 'dbook-20'
+        output_dir += 'dbook'
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         dataset = dbook()
@@ -468,7 +457,7 @@ def process(data_set, item_feat_list, implicit_num):
 
 
 def neighbor_statistic():
-    output_dir = "data_process/dbook_with_coclick"
+    output_dir = "data_process/dbook"
     valid_user_set = set()
     for state in states:
         neighbor_cnt_dict = collections.defaultdict(int)
