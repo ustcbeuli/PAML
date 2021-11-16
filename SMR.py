@@ -184,7 +184,6 @@ class SMR(torch.nn.Module):
 
     def get_user_sim_scores(self, user_x, user_mask, other_x, other_mask):
         """
-        用于采样的时候计算相似度
         :param user_x:
         :param user_mask:
         :param other_x:
