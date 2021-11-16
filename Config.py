@@ -32,7 +32,7 @@ config_db = {
     # option
     'social_num': 5,
     'implicit_num': 5,
-    'use_coclick': False,# No use, do not change  
+    'use_coclick': False,# Based on CF, useless, do not change  
     # 'coclick_num': 20,
 }
 
