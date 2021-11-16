@@ -1,6 +1,6 @@
 config_db = {
-    'input_dir': 'data_process/dbook_new',
-    'output_dir': 'res/dbook/nosp',
+    'input_dir': 'data_process/dbook',
+    'output_dir': 'res/dbook',
     'dataset': 'dbook',
     'use_cuda': True,
     'gpu': '2',
@@ -30,12 +30,9 @@ config_db = {
     'num_epoch': 120,
 
     # option
-    'use_specific': False,
-    'use_social': True,
     'social_num': 5,
-    'use_implicit': True,
     'implicit_num': 5,
-    'use_coclick': False,
+    'use_coclick': False,# No use, do not change  
     # 'coclick_num': 20,
 }
 
