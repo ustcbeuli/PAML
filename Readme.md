@@ -5,7 +5,7 @@
 在`graph.json`中加上数据集, 如movie
 
 ```
-python dataprocess.py 数据处理，得到目标文件
+python dataprocess.py # 数据处理，得到目标文件
 ```
 ```
 python main.py --device cuda:0 --log movie.txt --weight_decay 0  --batch_size 200000 --dataset movie --out_agg mean
@@ -61,7 +61,4 @@ head \t relation \t tail \t weight \n
 其中head和tail可以当user和item，weight如果没有可以设置成1
 
 ```
-## log结果统计
-```
-python log.py --log test.txt
-```
+
